@@ -4,7 +4,7 @@
 
 Api end point we are using for this example is https://jsonplaceholder.typicode.com/posts?_start=0&_limit=10
 
-We can use \_start and \_limit url parameters to fetch sample data from api
+We can use \_start and \_limit url parameters to fetch sample data from api.
 This is the pagination properties we are providing for useReactTable.
 
 ```typescript
@@ -14,7 +14,7 @@ const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
 });
 ```
 
-Table it set will update the page size and page index,so we are going listen changes and update table.
+Table will update the page size and page index,so we are going listen changes and update table data.
 
 ```typescript
 const [tblData, setTblData] = useState<Array<Post>>([]);
