@@ -1,30 +1,38 @@
-# React + TypeScript + Vite
+# TanStack Table (react table) pagination
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## TanStack Table (react table) server side pagination example
 
-Currently, two official plugins are available:
+Api end point we are using for this example is https://jsonplaceholder.typicode.com/posts?_start=0&_limit=10
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+We can use \_start and \_limit url parameters to fetch sample data from api
+This is the pagination properties we are providing for useReactTable.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+```typescript
+const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
+  pageIndex: 0,
+  pageSize: 10,
+});
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Table it set will update the page size and page index,so we are going listen changes and update table.
+
+```typescript
+const [tblData, setTblData] = useState<Array<Post>>([]);
+const [total, setTotal] = useState(0);
+
+const getPageData = (page: number, size: number) => {
+  fetch(
+    "https://jsonplaceholder.typicode.com/posts?_start=${page}&_limit=${size}"
+  )
+    .then((response) => {
+      console.log(response.headers.get("X-Total-Count"));
+      setTotal(Number.parseInt(response.headers.get("X-Total-Count") ?? "0"));
+      return response.json();
+    })
+    .then((json) => setTblData(json as Array<Post>));
+};
+
+useEffect(() => {
+  getPageData(pageIndex, pageSize);
+}, [pageIndex, pageSize]);
+```

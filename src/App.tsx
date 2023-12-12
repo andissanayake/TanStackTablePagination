@@ -36,11 +36,10 @@ export const App = () => {
     []
   );
 
-  const [{ pageIndex, pageSize }, setPagination] =
-    React.useState<PaginationState>({
-      pageIndex: 0,
-      pageSize: 10,
-    });
+  const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
 
   const [tblData, setTblData] = useState<Array<Post>>([]);
   const [total, setTotal] = useState(0);
